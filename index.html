@@ -36,11 +36,20 @@
         .compact-row {
             padding: 0.5rem 1rem !important;
         }
+        .confidence-5 {
+            background-color: #bbf7d0; /* Strong green for highest confidence */
+        }
         .confidence-4 {
-            background-color: #dcfce7;
+            background-color: #dcfce7; /* Medium green */
         }
         .confidence-3 {
-            background-color: #fef9c3;
+            background-color: #fef9c3; /* Yellow for medium confidence */
+        }
+        .confidence-2 {
+            background-color: #fee2e2; /* Light red for low confidence */
+        }
+        .confidence-1 {
+            background-color: #fecaca; /* Red for lowest confidence */
         }
     </style>
 </head>
@@ -81,10 +90,12 @@
                     { 
                         data: null,
                         render: function(data, type, row) {
+                            // Cap confidence at 5 stars maximum
+                            const confidence = Math.min(row.confidence, 5);
                             return `
                                 <div class="flex flex-col">
                                     <span class="font-medium">${row.tip}</span>
-                                    <span class="text-xs">Confidence: ${'★'.repeat(row.confidence)}${'☆'.repeat(4-row.confidence)}</span>
+                                    <span class="text-xs">Confidence: ${'★'.repeat(confidence)}${'☆'.repeat(5-confidence)}</span>
                                 </div>
                             `;
                         }
@@ -126,7 +137,9 @@
                 },
                 createdRow: function(row, data, dataIndex) {
                     $(row).addClass('compact-row');
-                    $(row).addClass(`confidence-${data.confidence}`);
+                    // Cap confidence at 5 and ensure it's at least 1
+                    const confidence = Math.min(Math.max(data.confidence, 1), 5);
+                    $(row).addClass(`confidence-${confidence}`);
                 }
             });
         });
