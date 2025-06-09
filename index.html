@@ -141,7 +141,11 @@
                     // Cap confidence at 5 and ensure it's at least 1
                     const confidence = Math.min(Math.max(data.confidence, 1), 5);
                     $(row).addClass(`confidence-${confidence}`);
-                }
+                },
+                // Disable initial sorting to maintain API order
+                order: [],
+                // Optional: Uncomment if you want to disable all sorting
+                // ordering: false
             });
         });
     });
